@@ -5,3 +5,4 @@ Collaborators
 
 Juan Perez
 Christopher Cortes
+Luis Parker
