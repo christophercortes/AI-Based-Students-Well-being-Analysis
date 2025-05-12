@@ -3,6 +3,6 @@ AI-Based Students Well-being Analysis will assits educators to prevent emotional
 
 Collaborators
 
-Juan Perez
-Christopher Cortes
-Luis Parker
+Juan Perez  
+Christopher Cortes  
+Luis Parker  
