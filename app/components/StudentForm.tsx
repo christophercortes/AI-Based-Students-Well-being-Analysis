@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
 
@@ -9,9 +9,20 @@ type SentimentScore = {
   compound: number;
 };
 
+type Emotion = {
+  label: string;
+  score: number;
+};
+
+type ApiResponse = {
+  sentiment?: SentimentScore;
+  emotion?: Emotion[];
+  summary: string;
+};
+
 export default function StudentForm() {
   const [file, setFile] = useState<File | null>(null);
-  const [result, setResult] = useState<SentimentScore | null>(null);
+  const [result, setResult] = useState<ApiResponse | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -21,25 +32,26 @@ export default function StudentForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!file) {
       alert('Please upload a text file.');
       return;
     }
 
     const reader = new FileReader();
-    
+
     reader.onload = async () => {
       const text = reader.result as string;
-      
+
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),
       });
 
-      const data = await res.json();
-      setResult(data.sentiment);
+      const data: ApiResponse = await res.json();
+      console.log('API result:', data);
+      setResult(data);
     };
 
     reader.readAsText(file);
@@ -66,10 +78,7 @@ export default function StudentForm() {
       {result && (
         <div className="mt-4">
           <h3 className="text-lg font-semibold">Results:</h3>
-          <p><strong>Positive:</strong> {result.pos}</p>
-          <p><strong>Neutral:</strong> {result.neu}</p>
-          <p><strong>Negative:</strong> {result.neg}</p>
-          <p><strong>Compound:</strong> {result.compound}</p>
+          <p>{result.summary}</p>
         </div>
       )}
     </div>
